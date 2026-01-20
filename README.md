@@ -73,8 +73,9 @@ current repo
 
 To set up an appropriate environment, navigate to the root of the repository and run the following commands:
 
-    conda env create --file environment.yml
+    conda create -n diffdock python=3.10
     conda activate diffdock
+    pip install -r requirements.txt
 
 See [conda documentation](https://conda.io/projects/conda/en/latest/commands/env/create.html) for more information.
 
