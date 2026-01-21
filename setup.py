@@ -8,4 +8,5 @@ setup(name='diffdock',
       description='DiffDock: Diffusion Steps, Twists, and Turns for Molecular Docking',
       author='Gabriele Corso',
       packages=find_packages(include=['diffdock', 'diffdock.*']),
+      include_package_data=True
      )
