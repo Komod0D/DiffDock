@@ -1,6 +1,8 @@
 import numpy as np
 import tqdm
 import os
+from importlib_resources import files, as_file
+import diffdock
 
 """
     Preprocessing for the SO(2)/torus sampling and score computations, truncated infinite series are computed and then
@@ -28,16 +30,28 @@ SIGMA_MIN, SIGMA_MAX, SIGMA_N = 3e-3, 2, 5000  # relative to pi
 x = 10 ** np.linspace(np.log10(X_MIN), 0, X_N + 1) * np.pi
 sigma = 10 ** np.linspace(np.log10(SIGMA_MIN), np.log10(SIGMA_MAX), SIGMA_N + 1) * np.pi
 
-if os.path.exists('.p.npy'):
-    p_ = np.load('.p.npy')
-    score_ = np.load('.score.npy')
-else:
+
+_p_path = files(diffdock).joinpath('.p.npy')
+_score_path = files(diffdock).joinpath('.score.npy')
+
+try:
+    with as_file(_p_path) as f:
+        p_ = np.load(f)
+    
+    with as_file(_score_path) as f:
+        score_ = np.load(f)
+    
+except FileNotFoundError as e:
     p_ = p(x, sigma[:, None], N=100)
-    np.save('.p.npy', p_)
 
     eps = np.finfo(p_.dtype).eps
     score_ = grad(x, sigma[:, None], N=100) / (p_ + eps)
-    np.save('.score.npy', score_)
+
+    with as_file(_p_path) as f:
+        np.save(f, p_)
+    
+    with as_file(_score_path) as f:
+        np.save(f, score_)
 
 
 def score(x, sigma):
