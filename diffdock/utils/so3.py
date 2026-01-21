@@ -2,6 +2,8 @@ import os
 import numpy as np
 import torch
 from scipy.spatial.transform import Rotation
+from importlib_resources import files, as_file
+import diffdock
 
 MIN_EPS, MAX_EPS, N_EPS = 0.0005, 4, 2000
 X_N = 2000
@@ -41,13 +43,27 @@ def _score(exp, omega, eps, L=2000):  # score of density over SO(3)
     dSigma = ((2 * l_vec + 1) * np.exp(-l_vec * (l_vec + 1) * eps**2 / 2) * (lo * dhi - hi * dlo) / lo ** 2).sum(0)
     return dSigma / exp
 
+_omegas_path = files(diffdock).joinpath('.so3_omegas_array4.npy')
+_cdf_path = files(diffdock).joinpath('.so3_cdf_vals4.npy')
+_scores_path = files(diffdock).joinpath('.so3_score_norms4.npy')
+_exp_scores_path = files(diffdock).joinpath('.so3_exp_score_norms4.npy')
 
-if os.path.exists('.so3_omegas_array4.npy'):
-    _omegas_array = np.load('.so3_omegas_array4.npy')
-    _cdf_vals = np.load('.so3_cdf_vals4.npy')
-    _score_norms = np.load('.so3_score_norms4.npy')
-    _exp_score_norms = np.load('.so3_exp_score_norms4.npy')
-else:
+try:
+    with as_file(_omegas_path) as f:
+        _omegas_array = np.load(f)
+
+    with as_file(_cdf_path) as f:
+        _cdf_vals = np.load(f)
+    
+    with as_file(_scores_path) as f:
+        _score_norms = np.load(f)
+    
+    with as_file(_exp_scores_path) as f:
+        _exp_score_norms = np.load(f)
+
+except FileNotFoundError as e:
+    raise e
+
     _eps_array = 10 ** np.linspace(np.log10(MIN_EPS), np.log10(MAX_EPS), N_EPS)
     _omegas_array = np.linspace(0, np.pi, X_N + 1)[1:]
 
