@@ -1,1 +1,3 @@
 include diffdock/.so3*
+include diffdock/.p.npy
+include diffdock/.score.npy
