@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 conda create -n diffdock python=3.10
 conda activate diffdock
