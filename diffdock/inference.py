@@ -25,7 +25,7 @@ from rdkit.Chem import RemoveAllHs
 
 # TODO imports are a little odd, utils seems to shadow things
 from diffdock.utils.logging_utils import configure_logger, get_logger
-import utils.utils
+from diffdock.utils import utils
 from diffdock.datasets.process_mols import write_mol_with_coords
 from diffdock.utils.download import download_and_extract
 from diffdock.utils.diffusion_utils import t_to_sigma as t_to_sigma_compl, get_t_schedule
