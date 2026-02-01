@@ -243,9 +243,9 @@ def rigid_transform_Kabsch_3D_torch(A, B):
     return R, t
 
 
-def rigid_transform_Kabsch_3D_torch_batch(A, B):
+def rigid_transform_Kabsch_3D_torch_batch(A: torch.Tensor, B: torch.Tensor):
     # R = Bx3x3 rotation matrix, t = Bx3x1 column vector
-
+    
     assert A.shape == B.shape
     _, N, M = A.shape
     if M != 3:
@@ -254,8 +254,9 @@ def rigid_transform_Kabsch_3D_torch_batch(A, B):
     A, B = A.permute(0, 2, 1), B.permute(0, 2, 1)
 
     # find mean column wise: 3 x 1
-    centroid_A = torch.mean(A, axis=2, keepdims=True)
-    centroid_B = torch.mean(B, axis=2, keepdims=True)
+    centroid_A = torch.mean(A, dim=2, keepdim=True)
+    centroid_B = torch.mean(B, dim=2, keepdim=True)
+
 
     # subtract mean
     Am = A - centroid_A

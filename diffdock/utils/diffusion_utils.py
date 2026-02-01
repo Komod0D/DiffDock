@@ -57,7 +57,7 @@ def modify_conformer(data, tr_update, rot_update, torsion_updates, pivot=None):
     return data
 
 
-def modify_conformer_batch(orig_pos, data, tr_update, rot_update, torsion_updates, mask_rotate):
+def modify_conformer_batch(orig_pos, data, tr_update: torch.Tensor, rot_update: torch.Tensor, torsion_updates: torch.Tensor, mask_rotate):
     B = data.num_graphs
     N, M, R = data['ligand'].num_nodes // B, data['ligand', 'ligand'].num_edges // B, data['ligand'].edge_mask.sum().item() // B
 
